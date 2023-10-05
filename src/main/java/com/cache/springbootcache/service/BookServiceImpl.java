@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @CachePut (cacheNames = "books", key="#book.id")
+//    @CachePut (cacheNames = "books", key="#book.id")
     public Book updateBook(Book book) {
         bookRepo.updateAddress(book.getId(), book.getName());
         logger.info("update the id " + book.getId() + " with new name");
@@ -47,7 +48,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Cacheable(cacheNames = "books", key = "#id")
+    @Cacheable(value = "books", key = "#id", unless = "#result.price>20000")//the result will not be cached if its price attribute is greater than 20000.
 
     public Book getBook(long id) {
         logger.info("fetching book from db");
@@ -67,5 +68,10 @@ public class BookServiceImpl implements BookService {
         logger.info("book is deleted from db");
 
         return "Book is deleted";
+    }
+
+    @Override
+    public List<Book> getallBook() {
+        return bookRepo.findAll();
     }
 }

@@ -4,6 +4,8 @@ import com.cache.springbootcache.dto.Book;
 import com.cache.springbootcache.service.BookService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("api")
@@ -24,6 +26,10 @@ public class BookController {
     public Book updateBook(@RequestBody Book book) {
         return bookService.updateBook(book);
 
+    }
+    @GetMapping("/all")
+    public List<Book> getAll(){
+        return bookService.getallBook();
     }
 
 
